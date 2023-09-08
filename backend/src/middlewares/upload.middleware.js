@@ -1,5 +1,5 @@
-const multer = require('multer')
-const path = require('path')
+import multer from 'multer'
+import path from 'path'
 
 const TYPE_IMAGES = {
   'image/jpg': 'jpg',
@@ -8,7 +8,7 @@ const TYPE_IMAGES = {
 }
 // con la propiedad Filename establecemos como se llamaran las imagenes y donde se guardarans
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, '../../public/images'),
+  destination: path.join('../../public/images'),
   filename: (req, file, cb) => {
     const extension = TYPE_IMAGES[file.mimetype]
     const name = file.originalname.split(' ').join('_')
@@ -16,6 +16,4 @@ const storage = multer.diskStorage({
   }
 })
 // Le indicamos a multer donde debe dejar las imagenes
-const upload = multer({ storage, dest: path.join(__dirname, '../../public/images') }).single('img')
-
-exports.upload = upload
+export const upload = multer({ storage, dest: path.join('../../public/images') }).single('img')

@@ -1,7 +1,7 @@
-const { check } = require('express-validator')
-const { validateResult } = require('../helpers/validate.helper.js')
+import { check } from 'express-validator'
+import { validateResult } from '../helpers/validate.helper.js'
 
-const validadorDePublicacion = [
+export const validadorDePublicacion = [
   check('nombre')
     .notEmpty()
     .exists()
@@ -23,4 +23,3 @@ const validadorDePublicacion = [
     .isEmpty()
     .withMessage('El contenido es requerido'),
   (req, res, next) => { validateResult(req, res, next) }]
-module.exports = { validadorDePublicacion }

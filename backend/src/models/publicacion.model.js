@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose'
+const collection = 'Publicacione'
 const PublicationSchema = new Schema({
   imgUrl: {
     type: String
@@ -29,4 +30,4 @@ const PublicationSchema = new Schema({
   timestamps: true,
   versionKey: false
 })
-module.exports = model('Publicacione', PublicationSchema)
+export default model(collection, PublicationSchema)

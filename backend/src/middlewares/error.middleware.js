@@ -1,2 +1,1 @@
-const handleError = (req, res) => { res.render('error404', { error: req.body }) }
-module.exports = { handleError }
+export const handleError = (req, res) => { res.json({ error: req.body }) }

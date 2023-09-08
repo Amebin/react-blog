@@ -1,6 +1,6 @@
-const fs = require('fs')
+import fs from 'fs'
 
-const borrarImagen = async (nombreDeLaImagen) => {
+export const borrarImagen = async (nombreDeLaImagen) => {
   console.log(nombreDeLaImagen)
   try {
     fs.unlinkSync(nombreDeLaImagen)
@@ -8,4 +8,3 @@ const borrarImagen = async (nombreDeLaImagen) => {
     return err
   }
 }
-module.exports = { borrarImagen }

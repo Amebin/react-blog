@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
+import { envConfig } from './env.config.js'
+import mongoose from 'mongoose'
 const dbConection = mongoose.connection
-
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(envConfig.database.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
