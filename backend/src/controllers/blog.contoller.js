@@ -1,80 +1,44 @@
-const Publication = require('../models/publicacion.model')
-const { borrarImagen } = require('../helpers/eliminar-imagen.helper.js')
-const path = require('path')
+import {
+  getPublicationsService,
+  createPublicationService,
+  deletePublicationService,
+  updatePublicationService,
+  solicitudesService,
+  getPublicationService,
+} from '../services/publications.service.js'
+export const getPublicationsCTRL = async (req, res) => {
+  try {
+    const publications = await getPublicationsService()
+    res.json(publications)
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const createPublicationCTRL = async (req, res) => {
+  try {
+    await createPublicationService(req.body)
+    res.json({ message: 'publicacion creada', status: 201 })
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const deletePublicationCTRL = async (req, res) => {
+  try {
+    const { id } = req.body
+    await deletePublicationService(id)
+    res.json({ message: 'publicacion eliminada' })
+  } catch (error) {
 
-const getPublicationsCTRL = (req, res) => {
-  Publication.find()
-    .then((publicaciones) => {
-      res.render('index', { publicaciones })
-    })
-    .catch((error) => {
-      res.json(error)
-    })
+  }
 }
-const createPublicationCTRL = (req, res) => {
-  const imgUrl = './images/' + req.file.filename
-  const { descripcion, titulo, contenido } = req.body
-  const sessionPromise = Publication.startSession()
-  const publication = new Publication({
-    titulo,
-    descripcion,
-    contenido,
-    imgUrl
-  })
-  sessionPromise.then((session) => {
-    session.startTransaction()
-    publication.save({ session }).then(() => {
-      session.commitTransaction()
-    }).catch((error) => {
-      session.abortTransaction().then(() => { throw error })
-    }).finally(() => {
-      session.endSession()
-    })
-  })
-    .then(() => {
-      res.redirect('/solicitud')
-    })
-    .catch((error) => {
-      res.render('error404', { error })
-    })
+export const updatePublicationCTRL = async (req, res) => {
+  try {
+    const data = req.body
+    await updatePublicationCTRL({ data })
+    res.json({ message: 'update' })
+  } catch (error) {
+    throw new Error(error)
+  }
 }
-const deletePublicationCTRL = (req, res) => {
-  const { id } = req.params
-  Publication.findById({ _id: id }).then((publicacion) => {
-    const imgUrl = path.join(__dirname, '../../public', publicacion.imgUrl)
-    borrarImagen(imgUrl)
-  }).catch((error) => res.render('error404', { error }))
-  Publication.deleteOne({ _id: id })
-    .then(() => {
-      res.redirect('/')
-    })
-    .catch((error) => res.render('error404', { error }))
-}
-const updatePublicationCTRL = (req, res) => {
-  const id = req.params.id
-  const publicacion = Publication.findById(id)
-  if (!publicacion) res.status(404).json('publicacion no encontrada')
-  const dataUpdate = req.body
-  Publication.updateOne({ _id: id }, dataUpdate)
-    .then(() => {
-      res.redirect('/')
-    }).catch((error) => res.render('error404', { error }))
-}
-const solicitudesCTRL = (req, res) => {
-  res.render('solicitudes')
-  console.log('hola')
-}
-const getPublicacionCTRL = (req, res) => {
-  const { id } = req.params
-  Publication.findById(id).then((publicacion) => {
-    res.render('publicacion', { publicacion })
-  }).catch((error) => res.render('error404', { error }))
-}
-module.exports = {
-  createPublicationCTRL,
-  getPublicationsCTRL,
-  updatePublicationCTRL,
-  deletePublicationCTRL,
-  solicitudesCTRL,
-  getPublicacionCTRL
-}
+export const solicitudesCTRL = async (req, res) => { res.json({ message: 'solicitudes' }) }
+export const getPublicationCTRL = async (req, res) => { res.json({ message: '1 publicacion' }) }

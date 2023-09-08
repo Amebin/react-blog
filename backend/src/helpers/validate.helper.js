@@ -1,6 +1,6 @@
-const { validationResult } = require('express-validator')
-const { borrarImagen } = require('./eliminar-imagen.helper.js')
-const validateResult = (req, res, next) => {
+import { validationResult } from 'express-validator'
+import { borrarImagen } from './eliminar-imagen.helper.js'
+export const validateResult = (req, res, next) => {
   try {
     validationResult(req).throw()
     return next()
@@ -10,5 +10,3 @@ const validateResult = (req, res, next) => {
     res.status(403).send({ errors: err.array() })
   }
 }
-
-module.exports = { validateResult }

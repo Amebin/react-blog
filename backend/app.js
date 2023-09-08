@@ -1,19 +1,10 @@
-import { config } from 'dotenv'
-import express, { json } from 'express'
-import { helmet } from 'helmet'
-import { usersRoutes } from './src/routes/users.routes.js'
+import { app } from './src/config/app.config.js'
+import { envConfig } from './src/config/env.config.js'
 
-config()
-const PORT = process.env.PORT || 3000
-const app = express()
-app.use(json())
-app.use(helmet)
+async function bootstrap () {
+  app.listen(envConfig.server.PORT, async () => {
+    console.log(`🔥 App ready an listening on PORT ${envConfig.server.PORT} 🔥`)
+  })
+}
 
-app.use('/api/users', usersRoutes())
-app.all('*', (req, res) => {
-  res.status(404).send({ status: 'ERR', data: 'No se encuentra el endpoint solicitado' })
-})
-
-app.listen(PORT, async () => {
-  console.log(`Backend inicializado puerto ${PORT}`)
-})
+bootstrap()
