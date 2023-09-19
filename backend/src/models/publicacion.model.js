@@ -1,29 +1,21 @@
 import { Schema, model } from 'mongoose'
-const collection = 'Publicacione'
+const collection = 'Publication'
 const PublicationSchema = new Schema({
-  imgUrl: {
-    type: String
-  },
-  contenido: {
+  content: {
     type: String,
     require: true
   },
-  titulo: {
+  title: {
     type: String,
     required: true
   },
-  autor: {
+  author: {
     type: String,
     default: 'Admin'
   },
-  descripcion: {
+  description: {
     type: String,
     required: true
-  },
-  aside: {
-    type: Boolean,
-    default: false,
-    required: false
   }
 },
 {

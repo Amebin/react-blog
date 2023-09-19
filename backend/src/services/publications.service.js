@@ -1,6 +1,4 @@
 import Publication from '../models/publicacion.model.js'
-import { borrarImagen } from '../helpers/eliminar-imagen.helper.js'
-import path from 'path'
 
 export const getPublicationsService = async (req, res) => {
   try {
@@ -11,14 +9,12 @@ export const getPublicationsService = async (req, res) => {
   }
 }
 export const createPublicationService = async (req, res) => {
-  const imgUrl = './images/' + req.file.filename
   const { descripcion, titulo, contenido } = req.body
   const sessionPromise = Publication.startSession()
   const publication = new Publication({
     titulo,
     descripcion,
-    contenido,
-    imgUrl
+    contenido
   })
   sessionPromise.then((session) => {
     session.startTransaction()
@@ -31,18 +27,15 @@ export const createPublicationService = async (req, res) => {
     })
   })
     .then(() => {
-      res.redirect('/solicitud')
+      res.json(publication).status(200)
     })
-    .catch((error) => {
-      res.render('error404', { error })
-    })
+    .catch((error) => { console.log(error) })
 }
 export const deletePublicationService = async (req, res) => {
   const { id } = req.params
-  Publication.findById({ _id: id }).then((publicacion) => {
-    const imgUrl = path.join('../../public', publicacion.imgUrl)
-    borrarImagen(imgUrl)
+  const publication = Publication.findById({ _id: id }).then((publicacion) => {
   }).catch((error) => res.render('error404', { error }))
+  if (!publication) return 'xd'
   Publication.deleteOne({ _id: id })
     .then(() => {
       res.redirect('/')
@@ -58,10 +51,6 @@ export const updatePublicationService = async (req, res) => {
     .then(() => {
       res.redirect('/')
     }).catch((error) => res.render('error404', { error }))
-}
-export const solicitudesService = async (req, res) => {
-  res.render('solicitudes')
-  console.log('hola')
 }
 export const getPublicationService = async (req, res) => {
   const { id } = req.params
