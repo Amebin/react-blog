@@ -1,51 +1,36 @@
-import {
-  getPublicationsService,
-  createPublicationService,
-  deletePublicationService,
-  updatePublicationService,
-  getPublicationService
-} from '../services/publications.service.js'
-export const getAllPublications = async (req, res) => {
-  try {
-    const publications = await getPublicationsService()
-    res.json(publications)
-  } catch (error) {
-    throw new Error(error)
-  }
+import blogService from '../services/publications.service.js'
+import { response } from '../helpers/response.helper.js'
+import { catchedAsync } from '../helpers/catchedasync.js'
+const getAllPublications = async (req, res) => {
+  const publications = await blogService.getPublications()
+  response(res, 200, publications)
 }
-export const getPublication = async (req, res) => {
-  try {
-    const { id } = req.body
-    const publication = await getPublicationService(id)
-    res.json(publication)
-  } catch (error) {
-    throw new Error(error)
-  }
+const getPublication = async (req, res) => {
+  const { id } = req.params
+  const publication = await blogService.getPublication(id)
+  response(res, 200, publication)
 }
-export const createPublication = async (req, res) => {
-  try {
-    const publication = req.body.publication
-    await createPublicationService(publication)
-    res.json({ message: 'publicacion creada', status: 201 })
-  } catch (error) {
-    throw new Error(error)
-  }
+const createPublication = async (req, res) => {
+  const newPublication = req.body
+  await blogService.createPublication(newPublication)
+  res.json({ message: 'publicacion creada', status: 201 })
 }
-export const deletePublication = async (req, res) => {
-  try {
-    const { id } = req.param
-    await deletePublicationService(id)
-    res.json({ message: 'publicacion eliminada' })
-  } catch (error) {
-    throw new Error(error)
-  }
+const deletePublication = async (req, res) => {
+  const { id } = req.params
+  await blogService.deletePublication(id)
+  res.json({ message: 'publicacion eliminada' })
 }
-export const updatePublication = async (req, res) => {
-  try {
-    const data = req.body
-    await updatePublicationService({ data })
-    res.json({ message: 'update' })
-  } catch (error) {
-    throw new Error(error)
-  }
+const updatePublication = async (req, res) => {
+  const dataUpdate = req.body
+  const { id } = req.params
+  await blogService.updatePublication(id, dataUpdate)
+  res.json({ message: 'update' })
+}
+
+export default {
+  getAllPublications: catchedAsync(getAllPublications),
+  getPublication: catchedAsync(getPublication),
+  createPublication: catchedAsync(createPublication),
+  deletePublication: catchedAsync(deletePublication),
+  updatePublication: catchedAsync(updatePublication)
 }

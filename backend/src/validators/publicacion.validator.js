@@ -1,25 +1,24 @@
-import { check } from 'express-validator'
+import { body } from 'express-validator'
 import { validateResult } from '../helpers/validate.helper.js'
 
 export const validadorDePublicacion = [
-  check('nombre')
-    .notEmpty()
-    .exists()
-    .isString()
-    .withMessage('El nombre es requerido'),
-  check('titulo')
+  body('title')
     .exists()
     .not()
     .isEmpty()
-    .withMessage('El titulo es requerido'),
-  check('descripcion')
+    .withMessage('tittle is required'),
+  body('description')
     .exists()
     .not()
     .isEmpty()
-    .withMessage('La descripcion es requerida'),
-  check('contenido')
+    .withMessage('description is required'),
+  body('content')
     .exists()
     .not()
     .isEmpty()
-    .withMessage('El contenido es requerido'),
+    .withMessage('content is required'),
+  body('author')
+    .exists()
+    .not()
+    .isEmpty(),
   (req, res, next) => { validateResult(req, res, next) }]

@@ -1,14 +1,16 @@
 // Requires
 import { Router } from 'express'
-import { updatePublication, deletePublication, createPublication, getPublication, getAllPublications } from '../controllers/blog.contoller.js'
+/* import { getAllPublications, getPublication, createPublication, updatePublication, deletePublication } from '../controllers/blog.contoller.js'
+ */
+import controller from '../controllers/blog.contoller.js'
 import { validadorDePublicacion } from '../validators/publicacion.validator.js'
 import { validadorDeId } from '../validators/id.validator.js'
 const router = Router()
 // Routes
-router.get('/', getAllPublications)
-router.post('/solicitudes', validadorDePublicacion, createPublication)
-router.get('/:id', getPublication)
-router.delete('/delete/:id', validadorDeId, deletePublication)
-router.put('/update/:id', updatePublication)
+router.get('/', controller.getAllPublications)
+router.get('/:id', validadorDeId, controller.getPublication)
+router.post('/create', validadorDePublicacion, controller.createPublication)
+router.put('/update/:id', controller.updatePublication)
+router.delete('/delete/:id', validadorDeId, controller.deletePublication)
 // Routes Exports
 export { router as publicationRouter }
